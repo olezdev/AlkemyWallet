@@ -1,3 +1,6 @@
+using AlkemyWallet.DataAccess;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +9,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var conString = builder.Configuration.GetConnectionString("DevConnection");
+builder.Services.AddDbContext<WalletDbContext>(options => options.UseSqlServer(conString));
 
 var app = builder.Build();
 
