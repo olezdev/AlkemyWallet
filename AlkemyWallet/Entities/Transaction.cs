@@ -6,7 +6,7 @@ namespace AlkemyWallet.Entities;
 
 public class Transaction : EntityBase
 {
-    [Column("amount")]
+    [Column("amount", TypeName = "decimal(9,2)")]
     public decimal Amount { get; set; }
 
     [Column("concept")]
@@ -18,22 +18,21 @@ public class Transaction : EntityBase
     [Column("type")]
     public string Type { get; set; }
 
-    [Column("account_id")]
-    public int AccountId { get; set; }
-
-    [ForeignKey("AccountId")]
-    public virtual Account Account { get; set; }
-
     [Column("user_id")]
+    [ForeignKey("User")]
     public int UserId { get; set; }
 
-    [ForeignKey("UserId")]
     public virtual User User { get; set; }
 
+    [Column("account_id")]
+    [ForeignKey("Account")]
+    public int? AccountId { get; set; }
+
+    public virtual Account Account { get; set; }
+
     [Column("to_account_id")]
+    [ForeignKey("ToAccount")]
     public int ToAccountId { get; set; }
-
-    //[ForeignKey("ToAccountId")]
+   
     public virtual Account ToAccount { get; set; }
-
 }

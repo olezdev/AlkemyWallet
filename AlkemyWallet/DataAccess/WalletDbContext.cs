@@ -1,7 +1,5 @@
 ﻿using AlkemyWallet.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
-using System.Text.RegularExpressions;
 
 namespace AlkemyWallet.DataAccess;
 
@@ -19,20 +17,34 @@ public class WalletDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Transaction>()
+            .HasKey(t => new { t.UserId, t.AccountId, t.ToAccountId });
+
+        modelBuilder.Entity<Transaction>()
+            .HasOne(x => x.User)
+            .WithMany()
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
+        modelBuilder.Entity<Transaction>()
+            .HasOne(x => x.Account)
+            .WithMany()
+            .HasForeignKey(x => x.AccountId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
+        modelBuilder.Entity<Transaction>()
+            .HasOne(x => x.ToAccount)
+            .WithMany()
+            .HasForeignKey(x => x.ToAccountId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
         modelBuilder.SeedRoles();
         modelBuilder.SeedUsers();
         modelBuilder.SeedAccounts();
         modelBuilder.SeedTransactions();
 
-        //modelBuilder.Entity<Transaction>()
-        //        .HasOne(p => p.Account)
-        //        .WithMany(t => t.Acc)
-        //        .HasForeignKey(m => m.)
-        //        .WillCascadeOnDelete(false);
-    //    modelBuilder
-    //.Entity<Transaction>()
-    //.HasOne(t => t.User)
-    //.WithOne(t => t.Id)
     }
 
 }
