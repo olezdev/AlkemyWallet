@@ -20,7 +20,7 @@ public class WalletDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Transaction>()
-            .HasKey(t => new { t.UserId, t.AccountId, t.ToAccountId });
+            .HasKey(t => new { t.Id });
 
         modelBuilder.Entity<Transaction>()
             .HasOne(x => x.User)
