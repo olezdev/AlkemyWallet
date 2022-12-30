@@ -44,7 +44,5 @@ public class WalletDbContext : DbContext
         modelBuilder.SeedUsers();
         modelBuilder.SeedAccounts();
         modelBuilder.SeedTransactions();
-
     }
-
 }
