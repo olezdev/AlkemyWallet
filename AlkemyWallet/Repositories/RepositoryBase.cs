@@ -53,7 +53,7 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : EntityBase
         }
         catch (Exception ex)
         {
-            throw new Exception("Error on Repository.GetById:" + ex.Message);
+            throw new Exception("Error on Repository.GetById: " + ex.Message);
         }
     }
 
@@ -66,7 +66,7 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : EntityBase
         }
         catch (Exception ex)
         {
-            throw new Exception("Error on Repository.Update", ex.Message);
+            throw new Exception("Error on Repository.Update: " + ex.Message);
         }
     }
 
@@ -85,7 +85,7 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : EntityBase
         }
         catch (Exception ex)
         {
-            throw new Exception("Error on Repository.Delete", ex.Message);
+            throw new Exception("Error on Repository.Delete: " + ex.Message);
         }
     }
 }
