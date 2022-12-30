@@ -11,9 +11,7 @@ public class AutoMapperProfiles : Profile
     {
         CreateMap<Role, RoleDTO>();
         CreateMap<RoleDTO, User>();
-        //CreateMap<User, UserDto>();
-        //CreateMap<UserDto, User>();
-
-
+        CreateMap<User, UserDTO>();
+        CreateMap<UserDTO, User>();
     }
 }
