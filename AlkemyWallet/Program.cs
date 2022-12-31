@@ -17,13 +17,15 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var conString = builder.Configuration.GetConnectionString("DevConnection");
-builder.Services.AddDbContext<WalletDbContext>(options => options.UseSqlServer(conString));
+builder.Services.AddDbContext<WalletDbContext>(options => 
+        options.UseSqlServer(conString));
 
 var app = builder.Build();
 
