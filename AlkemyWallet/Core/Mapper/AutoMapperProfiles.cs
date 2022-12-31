@@ -15,5 +15,7 @@ public class AutoMapperProfiles : Profile
         CreateMap<UserDTO, User>();
         CreateMap<Account, AccountDTO>();
         CreateMap<AccountDTO, Account>();
+        CreateMap<Transaction, TransactionDTO>();
+        CreateMap<TransactionDTO, Transaction>();
     }
 }
