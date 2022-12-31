@@ -3,6 +3,7 @@ using AlkemyWallet.Entities;
 using AlkemyWallet.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace AlkemyWallet.Repositories;
 
@@ -87,5 +88,24 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : EntityBase
         {
             throw new Exception("Error on Repository.Delete: " + ex.Message);
         }
+    }
+
+    public async Task<T> ExpressionGetAsync(
+        Expression<Func<T, bool>> predicate = null,
+        Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+        string includeProperties = "")
+    {
+        IQueryable<T> query = _dbSet;
+
+        if (predicate != null)
+            query = query.Where(predicate);
+
+        foreach (var includeProperty in includeProperties.Split
+            (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            query = query.Include(includeProperty);
+        }
+
+        return await query.FirstOrDefaultAsync();
     }
 }
