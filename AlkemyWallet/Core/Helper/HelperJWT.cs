@@ -26,7 +26,7 @@ public class HelperJWT
 
         //security key
         var authSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
+            Encoding.UTF8.GetBytes(_configuration["JWT:SecretKey"]));
 
         var credentials = new SigningCredentials(
             authSigningKey,

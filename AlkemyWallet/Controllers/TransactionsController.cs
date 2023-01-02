@@ -1,5 +1,6 @@
 ﻿using AlkemyWallet.Core.Models.DTO;
 using AlkemyWallet.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,7 @@ public class TransactionsController : ControllerBase
 	}
 
 	[HttpGet]
+	[Authorize("Regular")]
 	public async Task<IActionResult> Get()
 	{
 		return Ok(await _transactionService.GetAllAsync());

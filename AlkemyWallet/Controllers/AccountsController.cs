@@ -1,5 +1,6 @@
 ﻿using AlkemyWallet.Core.Models.DTO;
 using AlkemyWallet.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AlkemyWallet.Controllers;
@@ -16,6 +17,7 @@ public class AccountsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize("Admin")]
     public async Task<List<AccountDTO>> Get()
     {
         return await _accountService.GetAllAsync();
