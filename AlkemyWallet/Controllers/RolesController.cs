@@ -18,6 +18,7 @@ public class RolesController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize("Admin")]
     public async Task<List<RoleDTO>> Get()
     {
         return await _roleService.GetAllAsync();
