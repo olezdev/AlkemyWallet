@@ -17,7 +17,7 @@ public class AccountsController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     public async Task<List<AccountDTO>> Get()
     {
         return await _accountService.GetAllAsync();

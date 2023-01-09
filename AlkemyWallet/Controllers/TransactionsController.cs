@@ -12,15 +12,15 @@ public class TransactionsController : ControllerBase
 {
     private readonly ITransactionService _transactionService;
 
-	public TransactionsController(ITransactionService transactionService)
-	{
-		_transactionService = transactionService;
-	}
+    public TransactionsController(ITransactionService transactionService)
+    {
+        _transactionService = transactionService;
+    }
 
-	[HttpGet]
-	[Authorize("Regular")]
-	public async Task<IActionResult> Get()
-	{
-		return Ok(await _transactionService.GetAllAsync());
-	}
+    [HttpGet]
+    [Authorize(Roles = "Regular")]
+    public async Task<IActionResult> Get()
+    {
+        return Ok(await _transactionService.GetAllAsync());
+    }
 }

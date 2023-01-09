@@ -38,7 +38,8 @@ builder.Services.AddDbContext<WalletDbContext>(options =>
 //--- Adding Authentication for Swagger.
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Wallet", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "AlkemyWallet", Version = "v1" });
+
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
         Name = "Authorization",
@@ -85,20 +86,6 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new
     SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:SecretKey"]))
     };
-});
-
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("Admin",
-        authBuilder =>
-        {
-            authBuilder.RequireRole("Admin");
-        });
-    options.AddPolicy("Regular",
-        authBuilder =>
-        {
-            authBuilder.RequireRole("Regular");
-        });
 });
 
 var app = builder.Build();
