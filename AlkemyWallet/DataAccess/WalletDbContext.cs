@@ -1,5 +1,6 @@
 ﻿using AlkemyWallet.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace AlkemyWallet.DataAccess;
 
@@ -10,39 +11,23 @@ public class WalletDbContext : DbContext
 
     }
 
-    public virtual DbSet<Role> Roles { get; set; }
-    public virtual DbSet<User> Users { get; set; }
-    public virtual DbSet<Account> Accounts { get; set; }
-    public virtual DbSet<Transaction> Transactions { get; set; }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Transaction>()
-            .HasKey(t => new { t.Id });
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        
+        SeedData.Seed(modelBuilder);
 
-        modelBuilder.Entity<Transaction>()
-            .HasOne(x => x.User)
-            .WithMany()
-            .HasForeignKey(x => x.UserId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
-
-        modelBuilder.Entity<Transaction>()
-            .HasOne(x => x.Account)
-            .WithMany()
-            .HasForeignKey(x => x.AccountId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
-
-        modelBuilder.Entity<Transaction>()
-            .HasOne(x => x.ToAccount)
-            .WithMany()
-            .HasForeignKey(x => x.ToAccountId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
-
-        modelBuilder.SeedRoles();
-        modelBuilder.SeedUsers();
-        modelBuilder.SeedAccounts();
-        modelBuilder.SeedTransactions();
     }
+
+    //protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    //{
+    //    configurationBuilder.Properties<string>().HaveMaxLength(150);
+    //}
+
+    public virtual DbSet<Role> Roles { get; set; }
+    public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<Account> Accounts { get; set; }
+    public virtual DbSet<Transaction> Transactions { get; set; }
 }
