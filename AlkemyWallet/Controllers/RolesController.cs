@@ -18,9 +18,27 @@ public class RolesController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize("Admin")]
+    [Authorize(Roles = "Admin")]
     public async Task<List<RoleDTO>> Get()
     {
         return await _roleService.GetAllAsync();
+    }
+
+    [HttpGet("{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        try
+        {
+            var role = await _roleService.GetByIdAsync(id);
+            if (role is null)
+                return NoContent();
+
+            return Ok(role);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 }
