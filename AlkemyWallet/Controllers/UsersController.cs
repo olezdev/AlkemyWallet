@@ -74,4 +74,15 @@ public class UsersController : ControllerBase
         }
     }
 
+    [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var userDeleted = await _userService.DeleteAsync(id);
+        if (userDeleted)
+            return Ok("User " + id + " Deleted");
+        else
+            return NoContent();
+    }
+
 }

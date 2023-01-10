@@ -32,7 +32,7 @@ public class UserService : IUserService
     public async Task<UserRegisteredDTO> Register(UserRegisterDTO userDTO)
     {
         var userExist = await _unitOfWork.UserRepository.ExpressionGetAsync(
-            u => u.Email == userDTO.Email, 
+            u => u.Email == userDTO.Email,
             null, "");
 
         if (userExist != null)
@@ -69,14 +69,28 @@ public class UserService : IUserService
                 await _unitOfWork.SaveChangesAsync();
                 return userUpdated;
             }
-            else 
+            else
             {
-                throw new NoContentResult("BadRequest", 400);
+                throw new Exception();
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             throw new Exception(ex.Message);
         }
+    }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var userToDelete = await _unitOfWork.UserRepository.GetByIdAsync(id);
+        if (userToDelete == null)
+            return false;
+        else
+        {
+            _unitOfWork.UserRepository.Delete(userToDelete);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        return true;
     }
 }
