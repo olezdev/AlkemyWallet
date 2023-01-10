@@ -1,4 +1,5 @@
 ﻿using AlkemyWallet.Core.Models.DTO;
+using AlkemyWallet.Entities;
 using AlkemyWallet.Repositories.Interfaces;
 using AlkemyWallet.Services.Interfaces;
 using AutoMapper;
@@ -25,5 +26,32 @@ public class UserService : IUserService
     {
         var user = await _unitOfWork.UserRepository.GetByIdAsync(id);
         return _mapper.Map<UserDetailsDTO>(user);
+    }
+
+    public async Task<UserRegisteredDTO> Register(UserRegisterDTO userDTO)
+    {
+        var userExist = await _unitOfWork.UserRepository.ExpressionGetAsync(
+            u => u.Email == userDTO.Email, 
+            null, "");
+
+        if (userExist != null)
+            return null;
+        else
+        {
+            var newUser = new User
+            {
+                Email = userDTO.Email,
+                FirstName = userDTO.FirstName,
+                LastName = userDTO.LastName,
+                Password = userDTO.Password,
+                Points = 1,
+                RoleId = 2
+            };
+
+            await _unitOfWork.UserRepository.AddAsync(newUser);
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<UserRegisteredDTO>(newUser);
+        }
     }
 }
