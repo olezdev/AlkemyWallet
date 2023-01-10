@@ -48,7 +48,7 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : EntityBase
         try
         {
             var entity = await _dbSet.FindAsync(id);
-            if (entity == null) 
+            if (entity == null)
                 return null;
             return entity;
         }
@@ -71,18 +71,11 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : EntityBase
         }
     }
 
-    public async Task<T> DeleteAsync(int id)
+    public void Delete(T entity)
     {
         try
         {
-            var entity = await _dbSet.FindAsync(id);
-            if (entity == null)
-                return null;
-            else
-            {
-                _dbSet.Remove(entity);
-                return entity;
-            }
+            _dbSet.Remove(entity);
         }
         catch (Exception ex)
         {
@@ -108,4 +101,5 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : EntityBase
 
         return await query.FirstOrDefaultAsync();
     }
+
 }
