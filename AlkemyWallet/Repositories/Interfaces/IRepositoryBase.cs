@@ -12,7 +12,6 @@ public interface IRepositoryBase<T> where T : EntityBase
     Task<T> DeleteAsync(int id);
     Task<T> ExpressionGetAsync(
         Expression<Func<T, bool>> predicate = null,
-        Func<IQueryable<T>, 
-        IOrderedQueryable<T>> orderBy = null,
+        Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
         string includeProperties = "");
 }
