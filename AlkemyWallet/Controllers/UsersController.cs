@@ -1,4 +1,5 @@
 ﻿using AlkemyWallet.Core.Models.DTO;
+using AlkemyWallet.Entities;
 using AlkemyWallet.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -33,7 +34,7 @@ public class UsersController : ControllerBase
         var user = await _userService.GetByIdAsync(id);
         if (user == null)
             return BadRequest();
-        
+
         return Ok(user);
     }
 
@@ -46,6 +47,31 @@ public class UsersController : ControllerBase
             return BadRequest("There is an user registered whit that email. Please try another one");
 
         return Created("Usuario Creado", userCreated);
+    }
+
+    [HttpPut("{id}")]
+    [Authorize(Roles = "Regular")]
+    public async Task<IActionResult> Update(int id, [FromBody] UserUpdateDTO userDTO)
+    {
+        var userId = int.Parse(User.FindFirst("UserId").Value);
+        User result = null;
+
+        if (userId != id)
+            return Forbid();
+
+        try
+        {
+            result = await _userService.UpdateAsync(id, userDTO);
+
+            if (result != null)
+                return Ok(result);
+            else
+                return BadRequest(result);
+        }
+        catch(Exception ex) 
+        {
+            throw new Exception(ex.Message);
+        }
     }
 
 }

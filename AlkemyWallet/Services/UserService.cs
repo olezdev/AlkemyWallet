@@ -3,6 +3,7 @@ using AlkemyWallet.Entities;
 using AlkemyWallet.Repositories.Interfaces;
 using AlkemyWallet.Services.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AlkemyWallet.Services;
 
@@ -52,6 +53,30 @@ public class UserService : IUserService
             await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<UserRegisteredDTO>(newUser);
+        }
+    }
+
+    public async Task<User> UpdateAsync(int id, UserUpdateDTO userDTO)
+    {
+        try
+        {
+            var userToUpdate = await _unitOfWork.UserRepository.GetByIdAsync(id);
+            if (userToUpdate != null)
+            {
+                userToUpdate = _mapper.Map(userDTO, userToUpdate);
+
+                var userUpdated = await _unitOfWork.UserRepository.UpdateAsync(userToUpdate);
+                await _unitOfWork.SaveChangesAsync();
+                return userUpdated;
+            }
+            else 
+            {
+                throw new NoContentResult("BadRequest", 400);
+            }
+        }
+        catch(Exception ex)
+        {
+            throw new Exception(ex.Message);
         }
     }
 }

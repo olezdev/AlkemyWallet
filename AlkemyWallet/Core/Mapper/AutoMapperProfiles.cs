@@ -11,17 +11,14 @@ public class AutoMapperProfiles : Profile
     {
         // Roles
         CreateMap<Role, RoleDTO>();
-        //CreateMap<RoleDTO, User>();
         // Users
         CreateMap<User, UsersDTO>();
-        //CreateMap<UsersDTO, User>();
         CreateMap<User, UserDetailsDTO>();
         CreateMap<User, UserRegisteredDTO>();
+        CreateMap<UserUpdateDTO, User>();
         // Accounts
         CreateMap<Account, AccountDTO>();
-        //CreateMap<AccountDTO, Account>();
         //Transactions
         CreateMap<Transaction, TransactionDTO>();
-        //CreateMap<TransactionDTO, Transaction>();
     }
 }
