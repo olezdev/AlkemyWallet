@@ -4,5 +4,6 @@ namespace AlkemyWallet.Services.Interfaces;
 
 public interface IUserService
 {
-    Task<List<UserDTO>> GetAllAsync();
+    Task<List<UsersDTO>> GetAllAsync();
+    Task<UserDetailsDTO> GetByIdAsync(int id);
 }

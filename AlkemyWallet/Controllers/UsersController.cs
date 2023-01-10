@@ -20,7 +20,20 @@ public class UsersController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Get()
     {
-        return Ok(await _userService.GetAllAsync());
+        var users = await _userService.GetAllAsync();
+        return Ok(users);
+    }
+
+    [HttpGet("{id}")]
+    [Authorize(Roles = "Regular")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        // verificar que id sea del usuario logueado
+        var user = await _userService.GetByIdAsync(id);
+        if (user == null)
+            return BadRequest();
+        
+        return Ok(user);
     }
 
 }
