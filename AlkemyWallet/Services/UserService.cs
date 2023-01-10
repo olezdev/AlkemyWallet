@@ -15,9 +15,15 @@ public class UserService : IUserService
         _mapper = mapper;
     }
 
-    public async Task<List<UserDTO>> GetAllAsync()
+    public async Task<List<UsersDTO>> GetAllAsync()
     {
         var users = await _unitOfWork.UserRepository.GetAllAsync();
-        return _mapper.Map<List<UserDTO>>(users);
+        return _mapper.Map<List<UsersDTO>>(users);
+    }
+
+    public async Task<UserDetailsDTO> GetByIdAsync(int id)
+    {
+        var user = await _unitOfWork.UserRepository.GetByIdAsync(id);
+        return _mapper.Map<UserDetailsDTO>(user);
     }
 }
