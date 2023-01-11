@@ -28,27 +28,27 @@ public class TransactionConfig : IEntityTypeConfiguration<Transaction>
             .HasColumnName("user_id");
 
         builder
-            .HasOne(x => x.User)
+            .HasOne(t => t.User)
             .WithMany()
-            .HasForeignKey(x => x.UserId)
+            .HasForeignKey(t => t.UserId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
         builder.Property(t => t.AccountId)
             .HasColumnName("account_id");
 
         builder
-            .HasOne(x => x.Account)
+            .HasOne(t => t.Account)
             .WithMany()
-            .HasForeignKey(x => x.AccountId)
+            .HasForeignKey(t => t.AccountId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
         builder.Property(t => t.ToAccountId)
             .HasColumnName("to_account_id");
 
         builder
-            .HasOne(x => x.ToAccount)
+            .HasOne(t => t.ToAccount)
             .WithMany()
-            .HasForeignKey(x => x.ToAccountId)
+            .HasForeignKey(t => t.ToAccountId)
             .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }
