@@ -1,4 +1,6 @@
 ﻿using AlkemyWallet.Core.Models.DTO;
+using AlkemyWallet.Entities;
+using AlkemyWallet.Services;
 using AlkemyWallet.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -51,5 +53,27 @@ public class TransactionsController : ControllerBase
             return BadRequest();
 
         return Created("Transaction Created", transaction);
+    }
+
+    [HttpPatch("{id}")]
+    [Authorize(Roles = "Regular")]
+    public async Task<IActionResult> Patch(int id, [FromBody] TransactionToUpdateDTO transactionDTO)
+    {
+        var userId = int.Parse(User.FindFirst("UserId").Value);
+
+        try
+        {
+            var result = await _transactionService.UpdateAsync(id, userId, transactionDTO);
+
+            if (result is null)
+                return BadRequest(result);
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+
     }
 }

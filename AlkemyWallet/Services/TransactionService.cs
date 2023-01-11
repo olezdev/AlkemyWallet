@@ -26,9 +26,10 @@ public class TransactionService : ITransactionService
     {
         var transaction = await _unitOfWork.TransactionRepository
             .ExpressionGetAsync(
-            u => u.Id == id && u.UserId == userId,
-            null,
-            "User,Account,ToAccount");
+                u => u.Id == id && u.UserId == userId,
+                null,
+                "User,Account,ToAccount");
+
         if (transaction is null)
             return null;
 
@@ -48,7 +49,7 @@ public class TransactionService : ITransactionService
 
             var transactionToCreate = await _unitOfWork.TransactionRepository.AddAsync(transaction);
             await _unitOfWork.SaveChangesAsync();
-            
+
             var transactionCreated = new TransactionCreatedDTO();
             _mapper.Map(transactionToCreate, transactionCreated);
 
@@ -58,6 +59,37 @@ public class TransactionService : ITransactionService
         {
             throw new Exception(ex.Message);
         }
+    }
+
+    public async Task<TransactionUpdatedDTO> UpdateAsync(int id, int userId, TransactionToUpdateDTO transactionDTO)
+    {
+        try
+        {
+            var transactionToUpdate = await _unitOfWork.TransactionRepository
+                .ExpressionGetAsync(
+                    u => u.Id == id && u.UserId == userId,
+                    null, "");
+
+            if (transactionToUpdate is null)
+                return null;
+
+
+            _mapper.Map(transactionDTO, transactionToUpdate);
+
+            _ = _unitOfWork.TransactionRepository.UpdateAsync(transactionToUpdate);
+            await _unitOfWork.SaveChangesAsync();
+
+            var transactionUpdatedDTO = new TransactionUpdatedDTO();
+            _mapper.Map(transactionToUpdate, transactionUpdatedDTO);
+
+            return transactionUpdatedDTO;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+
+
 
     }
 }
