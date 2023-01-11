@@ -1,4 +1,5 @@
 ﻿using AlkemyWallet.Core.Models.DTO;
+using AlkemyWallet.Entities;
 using AlkemyWallet.Repositories.Interfaces;
 using AlkemyWallet.Services.Interfaces;
 using AutoMapper;
@@ -21,7 +22,7 @@ public class TransactionService : ITransactionService
         return _mapper.Map<List<TransactionDTO>>(transactions);
     }
 
-    public async Task<TransactionDetailsDTO> GetById(int id, int userId)
+    public async Task<TransactionDetailsDTO> GetByIdAsync(int id, int userId)
     {
         var transaction = await _unitOfWork.TransactionRepository
             .ExpressionGetAsync(
@@ -32,8 +33,31 @@ public class TransactionService : ITransactionService
             return null;
 
         var transactionDTO = new TransactionDetailsDTO();
-        transactionDTO = _mapper.Map(transaction,transactionDTO);
-        
+        transactionDTO = _mapper.Map(transaction, transactionDTO);
+
         return transactionDTO;
+    }
+
+    public async Task<TransactionCreatedDTO> CreateAsync(TransactionToCreateDTO transactionDTO)
+    {
+        try
+        {
+            var transaction = new Transaction();
+            _mapper.Map(transactionDTO, transaction);
+            transaction.Date = DateTime.Now;
+
+            var transactionToCreate = await _unitOfWork.TransactionRepository.AddAsync(transaction);
+            await _unitOfWork.SaveChangesAsync();
+            
+            var transactionCreated = new TransactionCreatedDTO();
+            _mapper.Map(transactionToCreate, transactionCreated);
+
+            return transactionCreated;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+
     }
 }

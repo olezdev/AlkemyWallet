@@ -34,10 +34,22 @@ public class TransactionsController : ControllerBase
     {
         var userId = int.Parse(User.FindFirst("UserId").Value);
 
-        var transaction = await _transactionService.GetById(id, userId);
+        var transaction = await _transactionService.GetByIdAsync(id, userId);
         if (transaction == null)
             return NoContent();
         
         return Ok(transaction);
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Post([FromBody] TransactionToCreateDTO transactionDTO)
+    {
+        var transaction = await _transactionService.CreateAsync(transactionDTO);
+
+        if(transaction == null)
+            return BadRequest();
+
+        return Created("Transaction Created", transaction);
     }
 }

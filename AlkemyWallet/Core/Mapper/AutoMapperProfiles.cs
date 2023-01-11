@@ -26,10 +26,10 @@ public class AutoMapperProfiles : Profile
         CreateMap<Transaction, TransactionDetailsDTO>()
             .ForMember(dest => dest.User,
             opt => opt.MapFrom(src => $"{src.User.FirstName} {src.User.LastName}"))
-            //.ForMember(dest => dest.AccountSource,
-            //opt => opt.MapFrom(src => $"{src.Account.User.FirstName} {src.Account.User.LastName}"))
             .ForMember(dest => dest.ToAccountUserId,
             opt => opt.MapFrom(src => src.ToAccount.UserId));
+        CreateMap<TransactionToCreateDTO, Transaction>();
+        CreateMap<Transaction, TransactionCreatedDTO>();
 
     }
 }
