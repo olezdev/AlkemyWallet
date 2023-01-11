@@ -21,6 +21,23 @@ public class TransactionsController : ControllerBase
     [Authorize(Roles = "Regular")]
     public async Task<IActionResult> Get()
     {
-        return Ok(await _transactionService.GetAllAsync());
+        var result = await _transactionService.GetAllAsync();
+        if (result == null)
+            return NotFound();
+
+        return Ok(result);
+    }
+
+    [HttpGet("{id}")]
+    [Authorize(Roles = "Regular")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var userId = int.Parse(User.FindFirst("UserId").Value);
+
+        var transaction = await _transactionService.GetById(id, userId);
+        if (transaction == null)
+            return NoContent();
+        
+        return Ok(transaction);
     }
 }
