@@ -16,6 +16,9 @@ public class AutoMapperProfiles : Profile
         CreateMap<User, UserDetailsDTO>();
         CreateMap<User, UserRegisteredDTO>();
         CreateMap<UserUpdateDTO, User>();
+        CreateMap<User, AuthMeDTO>()
+            .ForMember(dest => dest.Role, 
+            opt => opt.MapFrom(src => src.Role.Name));
         // Accounts
         CreateMap<Account, AccountDTO>();
         //Transactions
