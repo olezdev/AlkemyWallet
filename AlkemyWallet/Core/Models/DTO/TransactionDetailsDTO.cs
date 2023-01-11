@@ -1,5 +1,4 @@
-﻿using AlkemyWallet.Entities;
-
+﻿
 namespace AlkemyWallet.Core.Models.DTO;
 
 public class TransactionDetailsDTO
@@ -8,6 +7,8 @@ public class TransactionDetailsDTO
     public string Concept { get; set; }
     public decimal Amount { get; set; }
     public DateTime Date { get; set; }
-    public string AccountSource { get; set; }
-    public string AccountDestination { get; set; }
+    public int? AccountId { get; set; }
+    public string User { get; set; }
+    public int? ToAccountId { get; set; }
+    public int ToAccountUserId { get; set; }
 }
