@@ -11,6 +11,7 @@ public class AutoMapperProfiles : Profile
     {
         // Roles
         CreateMap<Role, RoleDTO>();
+
         // Users
         CreateMap<User, UsersDTO>();
         CreateMap<User, UserDetailsDTO>();
@@ -19,8 +20,10 @@ public class AutoMapperProfiles : Profile
         CreateMap<User, AuthMeDTO>()
             .ForMember(dest => dest.Role,
             opt => opt.MapFrom(src => src.Role.Name));
+
         // Accounts
         CreateMap<Account, AccountDTO>();
+
         //Transactions
         CreateMap<Transaction, TransactionDTO>();
         CreateMap<Transaction, TransactionDetailsDTO>()
@@ -30,6 +33,8 @@ public class AutoMapperProfiles : Profile
             opt => opt.MapFrom(src => src.ToAccount.UserId));
         CreateMap<TransactionToCreateDTO, Transaction>();
         CreateMap<Transaction, TransactionCreatedDTO>();
+        CreateMap<TransactionToUpdateDTO, Transaction>();
+        CreateMap<Transaction, TransactionUpdatedDTO>();
 
     }
 }
