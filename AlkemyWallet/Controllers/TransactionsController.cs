@@ -74,6 +74,15 @@ public class TransactionsController : ControllerBase
         {
             throw new Exception(ex.Message);
         }
+    }
 
+    [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var transactionDeleted = await _transactionService.DeleteAsync(id);
+        if (transactionDeleted)
+            return Ok(transactionDeleted);
+        return BadRequest();
     }
 }
