@@ -88,8 +88,22 @@ public class TransactionService : ITransactionService
         {
             throw new Exception(ex.Message);
         }
+    }
 
-
-
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var transactionToDelete = await _unitOfWork.TransactionRepository.GetByIdAsync(id);
+        if (transactionToDelete is null)
+            return false;
+        try
+        {
+            _unitOfWork.TransactionRepository.Delete(transactionToDelete);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 }
