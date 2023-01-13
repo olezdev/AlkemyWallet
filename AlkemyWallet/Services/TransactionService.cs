@@ -23,13 +23,13 @@ public class TransactionService : ITransactionService
         return _mapper.Map<List<TransactionsDTO>>(transactions);
     }
 
-    public async Task<PagedResponse> GetPaginated(int page, int pageSize)
+    public async Task<PagedResponse<TransactionsDTO>> GetPaginated(int page, int pageSize)
     {
         var transactions = await _unitOfWork.TransactionRepository.GetPagedAsync(page, pageSize);
 
         var transactionsDTO = _mapper.Map<List<TransactionsDTO>>(transactions);
-
-        var pagedResponse = new PagedResponse();
+        
+        PagedResponse<TransactionsDTO>? pagedResponse;
 
         if (page > transactions.TotalPages)
         {
@@ -39,10 +39,10 @@ public class TransactionService : ITransactionService
         {
             var url = "/transactions";
 
-            pagedResponse = new PagedResponse
+            pagedResponse = new PagedResponse<TransactionsDTO>
             {
-                nextPage = transactions.HasNextPage ? 
-                                $"{url}?page={page + 1}" 
+                nextPage = transactions.HasNextPage ?
+                                $"{url}?page={page + 1}"
                                 : "",
                 previousPage = (transactions.Count > 0 && transactions.HasPreviousPage) ?
                                     $"{url}?page={page - 1}" :

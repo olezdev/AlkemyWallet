@@ -10,6 +10,6 @@ public interface ITransactionService
     Task<TransactionCreatedDTO> CreateAsync(TransactionToCreateDTO transactionDTO);
     Task<TransactionUpdatedDTO> UpdateAsync(int id, int userId, TransactionToUpdateDTO transactionDTO);
     Task<bool> DeleteAsync(int id);
-    Task<PagedResponse> GetPaginated(int page, int pageSize);
+    Task<PagedResponse<TransactionsDTO>> GetPaginated(int page, int pageSize);
 
 }
