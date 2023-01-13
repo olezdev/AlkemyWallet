@@ -1,4 +1,5 @@
-﻿using AlkemyWallet.Core.Models.DTO;
+﻿using AlkemyWallet.Core.Helper;
+using AlkemyWallet.Core.Models.DTO;
 using AlkemyWallet.Entities;
 using AlkemyWallet.Repositories.Interfaces;
 using AlkemyWallet.Services.Interfaces;
@@ -16,10 +17,43 @@ public class TransactionService : ITransactionService
         _mapper = mapper;
     }
 
-    public async Task<List<TransactionDTO>> GetAllAsync()
+    public async Task<List<TransactionsDTO>> GetAllAsync()
     {
         var transactions = await _unitOfWork.TransactionRepository.GetAllAsync();
-        return _mapper.Map<List<TransactionDTO>>(transactions);
+        return _mapper.Map<List<TransactionsDTO>>(transactions);
+    }
+
+    public async Task<PagedResponse> GetPaginated(int page, int pageSize)
+    {
+        var transactions = await _unitOfWork.TransactionRepository.GetPagedAsync(page, pageSize);
+
+        var transactionsDTO = _mapper.Map<List<TransactionsDTO>>(transactions);
+
+        var pagedResponse = new PagedResponse();
+
+        if (page > transactions.TotalPages)
+        {
+            return null;
+        }
+        else
+        {
+            var url = "/transactions";
+
+            pagedResponse = new PagedResponse
+            {
+                nextPage = transactions.HasNextPage ? 
+                                $"{url}?page={page + 1}" 
+                                : "",
+                previousPage = (transactions.Count > 0 && transactions.HasPreviousPage) ?
+                                    $"{url}?page={page - 1}" :
+                                    "",
+                pageIndex = transactions.PageIndex,
+                totalPages = transactions.TotalPages,
+                data = transactionsDTO
+            };
+        }
+
+        return pagedResponse;
     }
 
     public async Task<TransactionDetailsDTO> GetByIdAsync(int id, int userId)

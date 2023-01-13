@@ -1,4 +1,5 @@
-﻿using AlkemyWallet.Core.Models.DTO;
+﻿using AlkemyWallet.Core.Filters;
+using AlkemyWallet.Core.Models.DTO;
 using AlkemyWallet.Entities;
 using AlkemyWallet.Services;
 using AlkemyWallet.Services.Interfaces;
@@ -19,16 +20,33 @@ public class TransactionsController : ControllerBase
         _transactionService = transactionService;
     }
 
-    [HttpGet]
-    [Authorize(Roles = "Regular")]
-    public async Task<IActionResult> Get()
-    {
-        var result = await _transactionService.GetAllAsync();
-        if (result == null)
-            return NotFound();
+    //[HttpGet]
+    //[Authorize(Roles = "Regular")]
+    //public async Task<IActionResult> GetAll()
+    //{
+    //    var result = await _transactionService.GetAllAsync();
+    //    if (result == null)
+    //        return NotFound();
 
-        return Ok(result);
+    //    return Ok(result);
+    //}
+
+    [HttpGet]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetAll([FromQuery] PaginationFilter filter)
+    {
+        try
+        {
+            var validFilter = new PaginationFilter(filter.Page, filter.PageSize);
+            var pageTransactions = await _transactionService.GetPaginated(validFilter.Page, validFilter.PageSize);
+            return Ok(pageTransactions);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
+
 
     [HttpGet("{id}")]
     [Authorize(Roles = "Regular")]
@@ -39,7 +57,7 @@ public class TransactionsController : ControllerBase
         var transaction = await _transactionService.GetByIdAsync(id, userId);
         if (transaction == null)
             return NoContent();
-        
+
         return Ok(transaction);
     }
 
@@ -49,7 +67,7 @@ public class TransactionsController : ControllerBase
     {
         var transaction = await _transactionService.CreateAsync(transactionDTO);
 
-        if(transaction == null)
+        if (transaction == null)
             return BadRequest();
 
         return Created("Transaction Created", transaction);

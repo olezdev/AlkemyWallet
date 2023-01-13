@@ -1,4 +1,5 @@
-﻿using AlkemyWallet.Core.Models.DTO;
+﻿using AlkemyWallet.Core.Helper;
+using AlkemyWallet.Core.Models.DTO;
 using AlkemyWallet.Entities;
 using AutoMapper;
 
@@ -25,7 +26,7 @@ public class AutoMapperProfiles : Profile
         CreateMap<Account, AccountDTO>();
 
         //Transactions
-        CreateMap<Transaction, TransactionDTO>();
+        CreateMap<Transaction, TransactionsDTO>();
         CreateMap<Transaction, TransactionDetailsDTO>()
             .ForMember(dest => dest.User,
             opt => opt.MapFrom(src => $"{src.User.FirstName} {src.User.LastName}"))
@@ -35,6 +36,5 @@ public class AutoMapperProfiles : Profile
         CreateMap<Transaction, TransactionCreatedDTO>();
         CreateMap<TransactionToUpdateDTO, Transaction>();
         CreateMap<Transaction, TransactionUpdatedDTO>();
-
     }
 }
