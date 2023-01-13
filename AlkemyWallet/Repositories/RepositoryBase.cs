@@ -1,4 +1,5 @@
-﻿using AlkemyWallet.DataAccess;
+﻿using AlkemyWallet.Core.Helper;
+using AlkemyWallet.DataAccess;
 using AlkemyWallet.Entities;
 using AlkemyWallet.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -100,6 +101,11 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : EntityBase
         }
 
         return await query.FirstOrDefaultAsync();
+    }
+
+    public async Task<PaginatedList<T>> GetPagedAsync(int pageIndex, int pageSize)
+    {
+        return await PaginatedList<T>.CreateAsync(_dbSet, pageIndex, pageSize);
     }
 
 }
