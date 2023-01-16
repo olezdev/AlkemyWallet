@@ -1,5 +1,7 @@
-﻿using AlkemyWallet.Core.Models.DTO;
+﻿using AlkemyWallet.Core.Filters;
+using AlkemyWallet.Core.Models.DTO;
 using AlkemyWallet.Entities;
+using AlkemyWallet.Services;
 using AlkemyWallet.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,12 +20,31 @@ public class UsersController : ControllerBase
         _userService = userService;
     }
 
+    //[HttpGet]
+    //[Authorize(Roles = "Admin")]
+    //public async Task<IActionResult> Get()
+    //{
+    //    var users = await _userService.GetAllAsync();
+    //    return Ok(users);
+    //}
+
     [HttpGet]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> GetAll([FromQuery] PaginationFilter filter)
     {
-        var users = await _userService.GetAllAsync();
-        return Ok(users);
+        try
+        {
+            var validFilter = new PaginationFilter(filter.Page, filter.PageSize);
+            var pageUsers = await _userService.GetPaginated(validFilter.Page, validFilter.PageSize);
+            if (pageUsers is null)
+                return BadRequest();
+
+            return Ok(pageUsers);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpGet("{id}")]
