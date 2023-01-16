@@ -1,4 +1,5 @@
-﻿using AlkemyWallet.Core.Models.DTO;
+﻿using AlkemyWallet.Core.Helper;
+using AlkemyWallet.Core.Models.DTO;
 using AlkemyWallet.Entities;
 using AlkemyWallet.Repositories.Interfaces;
 using AlkemyWallet.Services.Interfaces;
@@ -22,6 +23,40 @@ public class UserService : IUserService
         var users = await _unitOfWork.UserRepository.GetAllAsync();
         return _mapper.Map<List<UsersDTO>>(users);
     }
+
+    public async Task<PagedResponse<UsersDTO>> GetPaginated(int page, int pageSize)
+    {
+        var users = await _unitOfWork.UserRepository.GetPagedAsync(page, pageSize);
+
+        var usersDTO = _mapper.Map<List<UsersDTO>>(users);
+
+        PagedResponse<UsersDTO>? pagedResponse;
+
+        if (page > users.TotalPages)
+        {
+            return null;
+        }
+        else
+        {
+            var url = "/users";
+
+            pagedResponse = new PagedResponse<UsersDTO>
+            {
+                nextPage = users.HasNextPage ?
+                                $"{url}?page={page + 1}"
+                                : "",
+                previousPage = (users.Count > 0 && users.HasPreviousPage) ?
+                                    $"{url}?page={page - 1}" :
+                                    "",
+                pageIndex = users.PageIndex,
+                totalPages = users.TotalPages,
+                data = usersDTO
+            };
+        }
+
+        return pagedResponse;
+    }
+
 
     public async Task<UserDetailsDTO> GetByIdAsync(int id)
     {
