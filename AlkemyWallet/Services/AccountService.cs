@@ -37,7 +37,27 @@ public class AccountService : IAccountService
         {
             throw new Exception(ex.Message);
         }
-        
+    }
 
+    public async Task<AccountCreatedDTO> CreateAsync(int userId)
+    {
+        var account = new Account
+        {
+            CreationDate = DateTime.Now,
+            Money = 0,
+            UserId = userId,
+            IsBlocked = false
+        };
+        try
+        {
+            var accountCreated = await _unitOfWork.AccountRepository.AddAsync(account);
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<AccountCreatedDTO>(accountCreated);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 }

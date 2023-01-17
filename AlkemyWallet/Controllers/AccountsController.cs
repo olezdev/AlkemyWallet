@@ -1,6 +1,4 @@
-﻿using AlkemyWallet.Core.Models.DTO;
-using AlkemyWallet.Entities;
-using AlkemyWallet.Services.Interfaces;
+﻿using AlkemyWallet.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,6 +35,18 @@ public class AccountsController : ControllerBase
             return BadRequest();
 
         return Ok(account);
+    }
 
+    [HttpPost]
+    [Authorize(Roles ="Regular")]
+    public async Task<IActionResult> Post()
+    {
+        var userId = int.Parse(User.FindFirst("UserId").Value);
+
+        var account = await _accountService.CreateAsync(userId);
+        if (account is null)
+            return BadRequest();
+
+        return Ok(account);
     }
 }
