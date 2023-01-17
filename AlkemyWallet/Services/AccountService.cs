@@ -80,6 +80,25 @@ public class AccountService : IAccountService
         {
             throw new Exception(ex.Message);
         }
-        
+
     }
+
+    public async Task<bool> DeleteById(int id)
+    {
+        var account = await _unitOfWork.AccountRepository.GetByIdAsync(id);
+        if (account is null)
+            return false;
+
+        try
+        {
+            _unitOfWork.AccountRepository.Delete(account);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+    }
+
 }
