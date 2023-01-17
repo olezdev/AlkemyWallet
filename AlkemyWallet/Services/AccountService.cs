@@ -60,4 +60,26 @@ public class AccountService : IAccountService
             throw new Exception(ex.Message);
         }
     }
+
+    public async Task<AccountUpdatedDTO> UpdateBlockedAsync(int id, AccountToUpdateDTO accountDTO)
+    {
+        var account = await _unitOfWork.AccountRepository.GetByIdAsync(id);
+        if (account is null)
+            return null;
+
+        _mapper.Map(accountDTO, account);
+
+        try
+        {
+            var accountUpdate = await _unitOfWork.AccountRepository.UpdateAsync(account);
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<AccountUpdatedDTO>(accountUpdate);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+        
+    }
 }

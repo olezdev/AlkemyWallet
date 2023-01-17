@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
+﻿
 namespace AlkemyWallet.Entities;
 
 public class Account : EntityBase

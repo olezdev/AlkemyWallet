@@ -1,4 +1,5 @@
-﻿using AlkemyWallet.Services.Interfaces;
+﻿using AlkemyWallet.Core.Models.DTO;
+using AlkemyWallet.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -47,6 +48,16 @@ public class AccountsController : ControllerBase
         if (account is null)
             return BadRequest();
 
+        return Ok(account);
+    }
+
+    [HttpPatch("{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> UpdateBlocked(int id, AccountToUpdateDTO accountDTO)
+    {
+        var account = await _accountService.UpdateBlockedAsync(id, accountDTO);
+        if (account is null)
+            return BadRequest();
         return Ok(account);
     }
 }

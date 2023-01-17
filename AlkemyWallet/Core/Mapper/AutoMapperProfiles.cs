@@ -30,6 +30,8 @@ public class AutoMapperProfiles : Profile
             .ForMember(dest => dest.Email,
             opt => opt.MapFrom(src => src.User.Email));
         CreateMap<Account, AccountCreatedDTO>();
+        CreateMap<AccountToUpdateDTO, Account>();
+        CreateMap<Account, AccountUpdatedDTO>();
 
         //Transactions
         CreateMap<Transaction, TransactionsDTO>();
