@@ -23,7 +23,12 @@ public class AutoMapperProfiles : Profile
             opt => opt.MapFrom(src => src.Role.Name));
 
         // Accounts
-        CreateMap<Account, AccountDTO>();
+        CreateMap<Account, AccountsDTO>();
+        CreateMap<Account, AccountDetailsDTO>()
+            .ForMember(dest => dest.User,
+            opt => opt.MapFrom(src => $"{src.User.LastName} {src.User.FirstName}"))
+            .ForMember(dest => dest.Email,
+            opt => opt.MapFrom(src => src.User.Email));
 
         //Transactions
         CreateMap<Transaction, TransactionsDTO>();
