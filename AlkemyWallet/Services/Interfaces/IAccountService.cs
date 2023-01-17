@@ -8,4 +8,5 @@ public interface IAccountService
     Task<AccountDetailsDTO> GetByIdAsync(int id);
     Task<AccountCreatedDTO> CreateAsync(int userId);
     Task<AccountUpdatedDTO> UpdateBlockedAsync(int id, AccountToUpdateDTO accountDTO);
+    Task<bool> DeleteById(int id);
 }

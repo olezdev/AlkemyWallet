@@ -60,4 +60,16 @@ public class AccountsController : ControllerBase
             return BadRequest();
         return Ok(account);
     }
+
+    [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var account = await _accountService.DeleteById(id);
+        if (!account)
+            return BadRequest();
+        
+        return NoContent();
+    }
+
 }
