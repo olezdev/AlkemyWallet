@@ -3,6 +3,9 @@ using AlkemyWallet.Core.Models.DTO;
 using AlkemyWallet.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
+using Microsoft.AspNetCore.Hosting;
+using AlkemyWallet.Core.Helper;
 
 namespace AlkemyWallet.Controllers;
 
@@ -11,10 +14,12 @@ namespace AlkemyWallet.Controllers;
 public class AccountsController : ControllerBase
 {
     private readonly IAccountService _accountService;
+    private readonly IHttpClientFactory _httpClientFactory;
 
-    public AccountsController(IAccountService accountService)
+    public AccountsController(IAccountService accountService, IHttpClientFactory httpClientFactory)
     {
         _accountService = accountService;
+        _httpClientFactory = httpClientFactory;
     }
 
     //[HttpGet]
@@ -45,7 +50,7 @@ public class AccountsController : ControllerBase
         {
             throw new Exception(ex.Message);
         }
-        
+
     }
 
     [HttpGet("{id}")]
@@ -60,7 +65,7 @@ public class AccountsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles ="Regular")]
+    [Authorize(Roles = "Regular")]
     public async Task<IActionResult> Post()
     {
         var userId = int.Parse(User.FindFirst("UserId").Value);
@@ -89,8 +94,31 @@ public class AccountsController : ControllerBase
         var account = await _accountService.DeleteById(id);
         if (!account)
             return BadRequest();
-        
+
         return NoContent();
     }
 
+    [HttpPost("{id}")]
+    [Authorize(Roles = "Regular")]
+    public async Task<IActionResult> TransactionAsync(int id, TransactionDTO transactionDTO)
+    {
+        if (transactionDTO.Amount <= (decimal)0.01)
+            return BadRequest("Amount must be greater than 0,01");
+
+        var userId = int.Parse(User.FindFirst("UserId").Value);
+        var accountResponse = await _accountService.VerifyAccountAsync(id, userId, transactionDTO);
+
+        if (accountResponse is null)
+            return BadRequest("Please verify destination account");
+
+        var launchUrl = LaunchUrl.GetApplicationUrl();
+        var httpClient = _httpClientFactory.CreateClient("transactions");
+
+        // add jwt to httpClient
+        var httpResponseMessage = await httpClient.PostAsJsonAsync(launchUrl + "/transactions", transactionDTO);
+        var data = await httpResponseMessage.Content.ReadAsStringAsync();
+
+        return Ok(accountResponse);
+
+    }
 }

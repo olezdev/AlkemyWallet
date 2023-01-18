@@ -65,7 +65,7 @@ public class TransactionsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Regular")]
     public async Task<IActionResult> Post([FromBody] TransactionToCreateDTO transactionDTO)
     {
         var transaction = await _transactionService.CreateAsync(transactionDTO);
