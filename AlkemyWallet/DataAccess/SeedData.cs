@@ -63,7 +63,7 @@ public class SeedData
              UserId = 2,
              CreationDate = DateTime.Now,
              IsBlocked = false,
-             Money = 10000.00
+             Money = 10000.00m
          },
          new Account()
          {
@@ -71,7 +71,7 @@ public class SeedData
              UserId = 3,
              CreationDate = DateTime.Now,
              IsBlocked = false,
-             Money = 20000.00
+             Money = 20000.00m
          });
 
 
