@@ -38,11 +38,11 @@ public class TransactionsController : ControllerBase
         try
         {
             var validFilter = new PaginationFilter(filter.Page, filter.PageSize);
-            var pageTransactions = await _transactionService.GetPaginated(validFilter.Page, validFilter.PageSize);
-            if (pageTransactions is null)
+            var transactionsPage = await _transactionService.GetPaginated(validFilter.Page, validFilter.PageSize);
+            if (transactionsPage is null)
                 return BadRequest();
 
-            return Ok(pageTransactions);
+            return Ok(transactionsPage);
         }
         catch (Exception ex)
         {
