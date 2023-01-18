@@ -137,4 +137,58 @@ public class AccountService : IAccountService
         }
     }
 
+    public async Task<TransactionDTO> VerifyAccountAsync(int id, int userId, TransactionDTO transactionDTO)
+    {
+        try
+        {
+            var account = await _unitOfWork.AccountRepository.GetByIdAsync(id);
+
+            transactionDTO.UserId = userId;
+            transactionDTO.Date = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            transactionDTO.AccountId = id; //verify
+
+            if (userId != account.UserId)
+                throw new Exception("Account does not belong to user.");
+
+            var accountResponse = transactionDTO;
+
+            if (transactionDTO.Type == "Deposito" && transactionDTO.AccountId == transactionDTO.ToAccountId)
+            {
+                accountResponse = await DepositAsync(transactionDTO, account);
+            }
+            else if (transactionDTO.Type == "Transferencia")
+            {
+                //
+            }
+            else
+            {
+                throw new Exception("Type of transaction doesn't exist");
+            }
+            return accountResponse;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+
+    }
+
+    public async Task<TransactionDTO> DepositAsync(TransactionDTO transactionDTO, Account account)
+    {
+        try
+        {
+            account.Money += transactionDTO.Amount;
+            await _unitOfWork.AccountRepository.UpdateAsync(account);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return transactionDTO;
+
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+    }
+
 }
