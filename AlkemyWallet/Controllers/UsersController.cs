@@ -35,11 +35,11 @@ public class UsersController : ControllerBase
         try
         {
             var validFilter = new PaginationFilter(filter.Page, filter.PageSize);
-            var pageUsers = await _userService.GetPaginated(validFilter.Page, validFilter.PageSize);
-            if (pageUsers is null)
+            var usersPage = await _userService.GetPaginated(validFilter.Page, validFilter.PageSize);
+            if (usersPage is null)
                 return BadRequest();
 
-            return Ok(pageUsers);
+            return Ok(usersPage);
         }
         catch (Exception ex)
         {

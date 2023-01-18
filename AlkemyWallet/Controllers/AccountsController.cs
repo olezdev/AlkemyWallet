@@ -1,4 +1,5 @@
-﻿using AlkemyWallet.Core.Models.DTO;
+﻿using AlkemyWallet.Core.Filters;
+using AlkemyWallet.Core.Models.DTO;
 using AlkemyWallet.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,15 +17,35 @@ public class AccountsController : ControllerBase
         _accountService = accountService;
     }
 
+    //[HttpGet]
+    //[Authorize(Roles = "Admin")]
+    //public async Task<IActionResult> Get()
+    //{
+    //    var accounts = await _accountService.GetAllAsync();
+    //    if (accounts is null)
+    //        return BadRequest();
+
+    //    return Ok(accounts);
+    //}
+
     [HttpGet]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> GetAll([FromQuery] PaginationFilter filter)
     {
-        var accounts = await _accountService.GetAllAsync();
-        if (accounts is null)
-            return BadRequest();
+        try
+        {
+            var validFilter = new PaginationFilter(filter.Page, filter.PageSize);
+            var accountsPage = await _accountService.GetPaginated(validFilter.Page, validFilter.PageSize);
+            if (accountsPage is null)
+                return BadRequest();
 
-        return Ok(accounts);
+            return Ok(accountsPage);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+        
     }
 
     [HttpGet("{id}")]

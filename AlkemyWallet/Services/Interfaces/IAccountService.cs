@@ -1,4 +1,5 @@
-﻿using AlkemyWallet.Core.Models.DTO;
+﻿using AlkemyWallet.Core.Helper;
+using AlkemyWallet.Core.Models.DTO;
 
 namespace AlkemyWallet.Services.Interfaces;
 
@@ -9,4 +10,5 @@ public interface IAccountService
     Task<AccountCreatedDTO> CreateAsync(int userId);
     Task<AccountUpdatedDTO> UpdateBlockedAsync(int id, AccountToUpdateDTO accountDTO);
     Task<bool> DeleteById(int id);
+    Task<PagedResponse<AccountsDTO>> GetPaginated(int page, int pageSize);
 }
