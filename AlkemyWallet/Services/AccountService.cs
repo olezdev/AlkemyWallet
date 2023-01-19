@@ -143,22 +143,28 @@ public class AccountService : IAccountService
         {
             var account = await _unitOfWork.AccountRepository.GetByIdAsync(id);
 
-            transactionDTO.UserId = userId;
-            transactionDTO.Date = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-            transactionDTO.AccountId = id; //verify
-
             if (userId != account.UserId)
                 throw new Exception("Account does not belong to user.");
 
+            transactionDTO.UserId = userId;
+            transactionDTO.Date = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            transactionDTO.AccountId = id;
+
             var accountResponse = transactionDTO;
 
-            if (transactionDTO.Type == "Deposito" && transactionDTO.AccountId == transactionDTO.ToAccountId)
+            if (transactionDTO.Type == "Deposito" &&
+                transactionDTO.AccountId == transactionDTO.ToAccountId)
             {
                 accountResponse = await DepositAsync(transactionDTO, account);
             }
-            else if (transactionDTO.Type == "Transferencia")
+            else if (transactionDTO.Type == "Transferencia" &&
+                transactionDTO.AccountId != transactionDTO.ToAccountId )
             {
-                //
+                if(account.Money < transactionDTO.Amount)
+                {
+                    throw new Exception("Insufficient funds.");
+                }
+                accountResponse = await TransferAsync(transactionDTO, account);
             }
             else
             {
@@ -191,4 +197,28 @@ public class AccountService : IAccountService
         }
     }
 
+    public async Task<TransactionDTO> TransferAsync(TransactionDTO transactionDTO, Account account)
+    {
+        try
+        {
+            var destinationAccount = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDTO.ToAccountId);
+
+            if (destinationAccount is null)
+                throw new Exception("Destination account does not exist");
+
+            account.Money -= transactionDTO.Amount;
+            await _unitOfWork.AccountRepository.UpdateAsync(account);
+
+            destinationAccount.Money += transactionDTO.Amount;
+            await _unitOfWork.AccountRepository.UpdateAsync(destinationAccount);
+            
+            await _unitOfWork.SaveChangesAsync();
+
+            return transactionDTO;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+    }
 }
