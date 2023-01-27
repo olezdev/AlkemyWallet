@@ -1,17 +1,31 @@
-# Alkemy Wallet Backend Core Web API
-*El proyecto está desarrollado con:*
-- Language C#
+# 💰 Alkemy Wallet Backend Core Web API
+## 🚀Programa .NET eFALCOM by Alkemy
+*Practica personal del proyecto realizado con el team la Dotneta [AlkemyWallet](https://github.com/emmanuelranone/AlkemyWallet/tree/dev)*
+*Implementando todas las funcionalidades básicas que un usuario necesita para usar una billetera virtual*
+
+*📌 Requerimientos:*
+- Iniciar sesión.
+- Realiza depósitos en su cuenta.
+- Realizar transferencias a otras cuentas.
+- Actualizar y visualizar sus datos.
+- Crear y eliminar usuarios.
+- Actualizar y visualizar los datos de otros usuarios.
+- Actualizar, listar y eliminar transacciones realizadas por otros usuarios.
+
+*📚 Requerimientos técnicos:*
+- Uso de Entity Framework Core utilizando Code First.
+- Uso del patrón Unit of Work.
+- Manejo de sesiones usando JWT (JSON Web Tokens).
+- Manejo de errores.
+- Documentación y pruebas de la API con Swagger.
+
+*🛠️ El proyecto está desarrollado con:*
+- Lenguaje C#
 - .NET Core 6
-- Entity Framework Core
-- Code First
 - Fluent API
 - AutoMapper
-- Swagger
 
-## Programa .NET eFALCOM by Alkemy
-*Practica personal del proyecto realizado con el team la Dotneta [AlkemyWallet](https://github.com/emmanuelranone/AlkemyWallet/tree/dev)*
-
-## **Especificación de la Arquitectura**
+## 🏗️ **Especificación de la Arquitectura**
 
 ### **Capa Entities**
 En este nivel de la arquitectura definiremos todas las entidades de la base de datos.
