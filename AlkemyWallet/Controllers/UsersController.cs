@@ -71,7 +71,7 @@ public class UsersController : ControllerBase
     }
 
     /// <summary>
-    /// Get a user. Only available for Users.
+    /// Get an user. Only available for Users.
     /// </summary>
     /// <remarks>
     /// Sample request:
@@ -103,7 +103,7 @@ public class UsersController : ControllerBase
     }
 
     /// <summary>
-    /// Creates an user. Only available for Users.
+    /// Create an user.
     /// </summary>
     /// <remarks>
     /// Sample request:
@@ -128,7 +128,7 @@ public class UsersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [HttpPost]
-    [Authorize(Roles = "Regular")]
+    //[Authorize(Roles = "Regular")]
     public async Task<IActionResult> Register([FromBody] UserRegisterDTO newUser)
     {
         var userCreated = await _userService.Register(newUser);
