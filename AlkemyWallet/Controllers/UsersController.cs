@@ -47,7 +47,7 @@ public class UsersController : ControllerBase
     /// <response code="401">Invalid authentication credentials for the requested resource</response>
     /// <response code="403">User has not permission</response>
     /// <response code="404">Users not found</response>
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<RoleDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<UsersDTO>))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -85,7 +85,7 @@ public class UsersController : ControllerBase
     /// <response code="401">Invalid authentication credentials for the requested resource</response>
     /// <response code="403">User has not permission</response>
     /// <response code="404">User not found</response>
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RoleDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDetailsDTO))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -118,8 +118,8 @@ public class UsersController : ControllerBase
     ///     
     /// </remarks>
     /// <param name="newUser"></param> 
-    /// <returns>A newly created user</returns>
-    /// <response code="200">Return a role</response>
+    /// <returns>A created user</returns>
+    /// <response code="200">Return a created user</response>
     /// <response code="400">If the item is null</response>
     /// <response code="401">Invalid authentication credentials for the requested resource</response>
     /// <response code="403">User has not permission</response>
