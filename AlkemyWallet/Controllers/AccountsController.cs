@@ -201,18 +201,18 @@ public class AccountsController : ControllerBase
     /// 
     ///     POST /accounts/1
     ///     {
-    ///       "Amount": "1000",
-    ///       "Type": "Deposito",
-    ///       "Concept": "test",
-    ///       "ToAccountId": "1"
+    ///       "amount": "1000",
+    ///       "type": "Deposito",
+    ///       "concept": "test",
+    ///       "toAccountId": "1"
     ///     }
     ///     
     ///     POST /accounts/1
     ///     {
-    ///       "Amount": "500",
-    ///       "Type": "Transferencia",
-    ///       "Concept": "test",
-    ///       "ToAccountId": "2"
+    ///       "amount": "500",
+    ///       "type": "Transferencia",
+    ///       "concept": "test",
+    ///       "toAccountId": "2"
     ///     }
     ///     
     /// </remarks>
