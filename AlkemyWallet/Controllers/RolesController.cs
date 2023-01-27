@@ -20,10 +20,10 @@ public class RolesController : ControllerBase
     /// Gets the list of all roles. Only available for Administrators.
     /// </summary>
     /// <returns>The list of Roles</returns>
-    /// <response code="200">All Roles in order</response>
-    /// <response code="401">The client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
-    /// <response code="403">When an no admin user try to use the endpoint</response>
-    /// <response code="404">Source not found</response>
+    /// <response code="200">All Roles</response>
+    /// <response code="401">Invalid authentication credentials for the requested resource</response>
+    /// <response code="403">User has not permission</response>
+    /// <response code="404">Role not found</response>
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<RoleDTO>))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -52,18 +52,21 @@ public class RolesController : ControllerBase
     /// <remarks>
     /// Sample request:
     /// 
-    ///     GET roles/{id}
+    ///     GET roles/1
+    ///     
     /// </remarks>
-    /// <param name="id"></param> 
+    /// <param name="id">Role Id</param> 
     /// <returns>Role</returns>
     /// <response code="200">Return a role</response>
-    /// <response code="401">The client request has not been completed because it lacks valid authentication credentials for the requested resource</response>
-    /// <response code="403">When an no admin user try to use the endpoint</response>
-    /// <response code="404">Source not found</response>
+    /// <response code="401">Invalid authentication credentials for the requested resource</response>
+    /// <response code="403">User has not permission</response>
+    /// <response code="404">Role not found</response>
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RoleDTO))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Produces("application/json")]
     [HttpGet("{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetById(int id)
